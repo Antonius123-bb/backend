@@ -1,0 +1,526 @@
+//user management
+
+/*registerUser**************************************************************************************************************************/
+{
+    command: "registerUser",
+    data: {
+        name: "Max",
+        lastName: "Mustermann",
+        pw: "hashV",
+        email: "test@mail.de"	//muss unique sein
+    }
+}
+{
+	response: true,	
+	data: {
+		userId: "uuid"
+	}
+}
+{
+    response: false;
+    responseText: "failed to register user"
+}
+
+/*getUserById**************************************************************************************************************************/
+{
+    command: "getUserById"
+}
+{
+	response: true,
+	data: {
+		name: "Max",
+		lastName: "Mustermann",
+		adresses: [{
+            street: "Hauptstraße",
+            number: 12,
+            plz: 11111
+        }]
+		email: "test@mail.de"
+	}
+}	
+{
+    response: false;
+    responseText: "no user found for this id"
+}
+
+/*validateUser**************************************************************************************************************************/
+{
+    command: "validateUser",
+    data: {
+        email: "test@mail.de",
+        pw: "hashV"
+    }
+}
+{
+	response: true,
+	responseText: "user successfully validated",
+	data: {
+        name: "string",
+        email: "string",
+        authcode: "string"
+	}
+}
+{
+    response: false;
+    responseText: "user not validated"
+}
+
+// /*deleteUser**************************************************************************************************************************/
+// {
+//     command: "deleteUser",
+//     data: {
+//         pw: "hashV",
+//         authToken: "string"
+//     }
+// }
+// {
+// 	response: true,
+// 	responseText: "successfully deleted"
+// }
+// {
+//     response: false;
+//     responseText: "user could not be deleted"
+// }
+
+// /*sendForgetPasswordMail**************************************************************************************************************************/
+// //sende mail mit token (url) an user
+// {
+//     command: "sendForgetPasswordMail",
+//     data: {
+//         email: "test@gmail.com" //check if email is in db
+//     }
+// }
+// {
+// 	response: true,
+// 	responseText: "mail successfully sent"
+// }
+// {
+//     response: false;
+//     responseText: "mail is not in db"
+// }
+
+// /*matchToken**************************************************************************************************************************/
+// {
+//     command: "matchToken",
+//     data: {
+//         token: "123456789"
+//     }
+// }
+// {
+// 	response: true,
+//     responseText: "token available"
+// }
+// {
+//     response: false;
+//     responseText: "token not available"
+// }
+
+// /*resetPassword**************************************************************************************************************************/
+// {
+//     command: "resetPassword",
+//     data: {
+//         token: "string",
+//         pw: "new hashV"
+//     }
+// }
+// {
+// 	response: true,
+// 	responseText: "password successfully resetted"
+// }
+// {
+//     response: false;
+//     responseText: "password could not be resetted"
+// }
+
+/*updatedUserById**************************************************************************************************************************/
+{
+    command: "updatedUserById",
+    data: {
+        name: "Max",
+        lastName: "Mustermann",
+        email: "test@mail.de"
+        
+    }
+}
+{
+	response: true,
+	responseText: "user succesfully updated",
+	data: {
+		name: "Max",
+		lastName: "Mustermann",
+		street: "Hauptstraße",
+		number: 12,
+		plz: 11111,
+		email: "test@mail.de"
+    }
+}
+{
+    response: false;
+    responseText: "user could not be updated"
+}
+
+//add Id to Adress
+/*addAdressByUser************************************************************************************************************************/
+{
+    command: "addAdressByUserId",
+    data: {
+        name: "Max",
+        lastName: "Mustermann"
+        street: "Hauptstraße",
+        number: 12,
+        plz: 11111
+    }
+}
+{
+    response: true,
+    data: {
+        adresses: []
+    }
+}
+{
+    response: false
+}
+
+/*deleteAdressById************************************************************************************************************************/
+{
+    command: "deleteAdressById",
+    id: "userId"
+    data: {
+        addId: uuid
+    }
+}
+{
+    response: true,
+    data: {
+        adresses: []
+    }
+}
+{
+    response: false
+}
+
+/*changePassword*************************************************************************************************************************/
+{
+    command: "changePassword",
+    id: "userId"
+    data: {
+        oldPassword: "...",
+        newPassword: "..."
+    }
+}
+{
+    response: true
+}
+{
+    response: false
+}
+
+/*getAllMovies**************************************************************************************************************************/
+{
+    command: "getAllMovies",
+}
+{
+	response: true,
+	data: [
+        {
+            title: "title",
+            rating: "rating",
+            image: "sourcepath",
+            fsk: 12,
+            genre: "SciFi",
+            movieId: "uuid"
+        }
+    ]
+}
+{
+    response: false;
+    responseText: "movies could not be found"
+}
+
+/*getMovieById**************************************************************************************************************************/
+{
+    command: "getMovieById",
+}
+{
+	response: true,
+	data: {
+        title: "title",
+        description: "description",
+        rating: "rating",
+        image: "sourcepath",
+        fsk: 12,
+        genre: "SciFi",
+        length: 119,
+        movieId: "uuid",
+        movieStart: timestamp,
+        productionLocation: "New Zealand",
+        trailerUrl: "https://youtube.de/ee8194693uref"
+    }
+}
+{
+    response: false;
+    responseText: "movie could not be found"
+}
+
+/*getPresentations**************************************************************************************************************************/
+//alle Vorstellungen die in dem Zeitraum sind ausgeben
+{ 
+    command: "getAllPresentations",
+    filter: {
+        startDate: timestamp,
+        endDate: timestamp
+    }
+}
+{
+	response: true,
+    data: [
+        {
+            presentationId: "uuid",
+            presentationStart: timestamp,
+            presentationEnd: timestamp,
+            movieTitle: "Test",
+            movieRating: 4, // 4 out of 5 stars
+            movieFsk: 12
+        }
+    ]
+}
+{
+    response: false;
+    responseText: "no presentations found"
+}
+
+/*getPresentationById**************************************************************************************************************************/
+{
+    command: "getPresentationById",
+    data: {
+        presentationId: "uuid"
+    }
+}
+{
+	response: true,
+    data: {
+        presentationId: "uuid",
+        presentationStart: timestamp,
+        presentationEnd: timestamp,
+        movieId: "uuid",
+        seats: [{row: "e", seat: 5, booked: false, price: 12.50}, {row: "e", seat: 6, booked: false, price: 12.50}]
+    }
+}
+{
+    response: false;
+    responseText: "no presentation found for this id"
+}
+
+/*bookSeats**************************************************************/
+{ 
+    command: "bookSeats",
+        seats: [5, 8, 10, ...],
+        presentationId: "uuid",
+        userId: "uuid", //optional
+        userData: { //optional
+            name: "Max",
+            lastName: "Mustermann",
+            street: "Hauptstraße",
+            number: 12,
+            plz: 11111,
+            email: "test@mail.de"
+        }
+        payment: "bar"
+    
+}
+{
+	response: true,
+    responseText: "seats successfully reservated",
+    data: {
+        orderId: "uuid" //to verify if process is payed and seats are booked
+    }
+}
+{
+    response: false,
+    responseText: "seats are not available"
+}
+
+/*cancelOrder*/
+{
+    command: "cancelOrder",
+    id: "uuid"
+}
+{
+	response: true,
+    text: "canceled"
+}
+{
+    response: false;
+    responseText: "failed cancelling"
+}
+
+/*getOrdersByUser********************************************************************************************************************/
+{
+    command: "getOrdersByUser",
+}
+{
+	response: true,
+    data: {
+        orders: [] //absteigend
+    }
+}
+{
+    response: false;
+    responseText: "no orders"
+}
+
+/*getOrderById**************************************************************************************************************************/
+{
+    command: "getOrderById",
+    data: {
+        processId: "uuid"
+    }
+}
+{
+	response: true,
+    data: {
+        orderData
+    }
+}
+{
+    response: false;
+    responseText: "process could not be found"
+}
+
+// /*saveMovie**************************************************************************************************************************/
+// {
+//     command: "saveMovie",
+//     data: {
+//         title: "title",
+//         description: "description",
+//         rating: "rating",
+//         image: "sourcepath",
+//         fsk: 12,
+//         genre: "SciFi",
+//         length: 119,
+//         movieStart: timestamp,
+//         productionLocation: "New Zealand",
+//         trailerUrl: "https://youtube.de/ee8194693uref"
+//     }
+// }
+// {
+// 	response: true,
+//     data: {
+//         movieId: "uuid",
+//     }
+// }
+// {
+//     response: false;
+//     responseText: "movie could not be saved"
+// }
+
+// /*updateMovieById**************************************************************************************************************************/
+// {
+//     command: "updateMovieById",
+//     data: {
+//         movieId: "uuid",
+//         movieDetails : {
+//             title: "title",
+//             description: "description",
+//             rating: "rating",
+//             image: "sourcepath",
+//             fsk: 12,
+//             genre: "SciFi",
+//             length: 119,
+//             movieStart: timestamp,
+//             productionLocation: "New Zealand",
+//             trailerUrl: "https://youtube.de/ee8194693uref"
+//         }
+//     }
+// }
+// {
+// 	response: true,
+//     responseText: "movie successfully updated",
+//     data: {
+//         title: "title",
+//         description: "description",
+//         rating: "rating",
+//         image: "sourcepath",
+//         fsk: 12,
+//         genre: "SciFi",
+//         length: 119,
+//         movieStart: timestamp,
+//         productionLocation: "New Zealand",
+//         trailerUrl: "https://youtube.de/ee8194693uref"
+//     }
+// }
+// {
+//     response: false;
+//     responseText: "movie could not be update"
+// }
+
+// /*deleteMovieById**************************************************************************************************************************/
+// {
+//     command: "deleteMovieById",
+//     data: {
+//         movieId: "uuid"
+//     }
+// }
+// {
+// 	response: true,
+//     responseText: "movie successfully deleted"
+// }
+// {
+//     response: false;
+//     responseText: "movie could not be deleted"
+// }
+
+/*createPresentation**************************************************************************************************************************/
+{
+    command: "createPresentation",
+    data: {
+        presentationStart: timestamp,
+        presentationEnd: timestamp,
+        movieId: "uuid",
+        seats: [{row: "e", seat: 5, booked: false, price: 12.50}, {row: "e", seat: 6, booked: false, price: 12.50}]
+    }
+}
+{
+	response: true,
+    responseText: "presentation successfully created",
+    data: {
+        presentationId: "uuid"
+    }
+}
+{
+    response: false;
+    responseText: "presentation could not be created"
+}
+
+/*updatePresentationById**************************************************************************************************************************/
+{
+    command: "updatePresentationById",
+    id: "uuid",
+    data: {
+        presentationStart: timestamp,
+        presentationEnd: timestamp,
+        movieId: "uuid"
+    }
+}
+{
+	response: true,
+    responseText: "presentation successfully updated"
+}
+{
+    response: false;
+    responseText: "presentation could not be updated"
+}
+
+/*deletePresentationById**************************************************************************************************************************/
+{
+    command: "deletePresentationById",
+    id: "uuid"
+}
+{
+	response: true,
+    responseText: "presentation successfully deleted"
+}
+{
+    response: false;
+    responseText: "presentation could not be deleted"
+}
