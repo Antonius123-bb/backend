@@ -4,6 +4,7 @@ import userService from './services/userService';
 import movieService from './services/movieService';
 import presentationService from './services/presentationService';
 import orderService from './services/orderService';
+const cors = require('cors');
 
 //express setup
 const app = express();
@@ -13,6 +14,8 @@ app.use(bodyParser.json({
         req.rawBody = buf;
     }
 }));
+
+app.use(cors());
 
 //home route
 app.get('/', (req, res) => res.send('Hello World!'));
