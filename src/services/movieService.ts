@@ -36,7 +36,10 @@ export default {
                 MongoClient.connect(url, function(err:any, db:any) {
                     if (err) throw err;
                     var dbo = db.db("kino");
-                    const o_id = new ObjectId(req.params.id);
+                    let o_id = "";
+                    try {
+                        o_id = new ObjectId(req.params.id);
+                    } catch(e) {}
                     
                     dbo.collection("movies").findOne({ _id: o_id }, function(err:any, result:any) {
                         console.log(result)
