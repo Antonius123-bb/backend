@@ -182,19 +182,19 @@ export default {
     createPresentation: (req:any, res:any) => {
         try {
             if(req.body.presentationStart != undefined && req.body.presentationEnd != undefined
-                && req.body.movieId != undefined && req.body.room != undefined && req.body.basicPrice != undefined) {
+                && req.body.movieId != undefined && req.body.room != undefined && req.body.basicPrice != undefined && req.body.roomId != undefined) {
 
                 MongoClient.connect(url, function(err:any, db:any) {
                     if (err) throw err;
                     var dbo = db.db("kino");
 
                     //get room id and load array from db to show seats
-
                     var myobj = { 
                         presentationStart: req.body.presentationStart,
                         presentationEnd: req.body.presentationEnd,
                         movieId: req.body.movieId,
                         basicPrice: req.body.basicPrice,
+                        roomId: req.body.roomId,
                         seats: [{id: 1, booked: false, price: 12.50, x: 0, y: 0}, {id: 2, booked: false, price: 12.50, x: 10, y: 0}]
                     };
 
@@ -219,7 +219,7 @@ export default {
     updatePresentationById: (req:any, res:any) => {
         try {
             if(req.body.id != undefined && req.body.data.presentationStart != undefined && req.body.data.presentationEnd != undefined
-                && req.body.data.movieId != undefined && req.body.basicPrice != undefined) {
+                && req.body.data.movieId != undefined) {
 
                 MongoClient.connect(url, function(err:any, db:any) {
                     if (err) throw err;
@@ -228,8 +228,7 @@ export default {
                     var newVals = { 
                         presentationStart: req.body.data.presentationStart,
                         presentationEnd: req.body.data.presentationEnd,
-                        movieId: req.body.data.movieId,
-                        basicPrice: req.body.basicPrice
+                        movieId: req.body.data.movieId
                     };
 
                     const newValues = { $set: newVals };
