@@ -1,8 +1,8 @@
 import bodyParser = require("body-parser");
 
-var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/";
-var ObjectId = require('mongodb').ObjectId;
+let MongoClient = require('mongodb').MongoClient;
+let url = "mongodb://localhost:27017/";
+let ObjectId = require('mongodb').ObjectId;
 
 export default {    
 
@@ -15,7 +15,7 @@ export default {
 
                 MongoClient.connect(url, function(err:any, db:any) {
                     if (err) throw err;
-                    var dbo = db.db("kino");
+                    let dbo = db.db("kino");
           
                     const o_id = new ObjectId(req.body.id);
 
@@ -102,7 +102,7 @@ export default {
             if(req.params.id != undefined) {
                 MongoClient.connect(url, function(err:any, db:any) {
                     if (err) throw err;
-                    var dbo = db.db("kino");
+                    let dbo = db.db("kino");
                     
                     dbo.collection("orders").find({ user: req.params.id }).toArray(function(err:any, result:any) {
                         if (err || result === null) {
@@ -131,7 +131,7 @@ export default {
             if(req.params.id != undefined) {
                 MongoClient.connect(url, function(err:any, db:any) {
                     if (err) throw err;
-                    var dbo = db.db("kino");
+                    let dbo = db.db("kino");
                     const o_id = new ObjectId(req.params.id);
                     
                     dbo.collection("orders").findOne({ _id: o_id }, function(err:any, result:any) {

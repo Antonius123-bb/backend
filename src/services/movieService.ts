@@ -1,6 +1,6 @@
-var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/";
-var ObjectId = require('mongodb').ObjectId;
+let MongoClient = require('mongodb').MongoClient;
+let url = "mongodb://localhost:27017/";
+let ObjectId = require('mongodb').ObjectId;
 
 export default {
 
@@ -9,7 +9,7 @@ export default {
         try {
             MongoClient.connect(url, function(err:any, db:any) {
                 if (err) throw err;
-                var dbo = db.db("kino");
+                let dbo = db.db("kino");
                 
                 dbo.collection("movies").find({}).toArray(function(err:any, result:any) {
                     if (err || result === null) {
@@ -35,7 +35,7 @@ export default {
             if(req.params.id != undefined) {
                 MongoClient.connect(url, function(err:any, db:any) {
                     if (err) throw err;
-                    var dbo = db.db("kino");
+                    let dbo = db.db("kino");
                     let o_id = "";
                     try {
                         o_id = new ObjectId(req.params.id);

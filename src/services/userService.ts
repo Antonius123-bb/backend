@@ -1,8 +1,8 @@
-var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/";
-var shajs = require('sha.js')
+let MongoClient = require('mongodb').MongoClient;
+let url = "mongodb://localhost:27017/";
+let shajs = require('sha.js')
 const { v4: uuidv4 } = require('uuid');
-var ObjectId = require('mongodb').ObjectId; 
+let ObjectId = require('mongodb').ObjectId; 
 
 export default {    
 
@@ -22,8 +22,8 @@ export default {
 
                     MongoClient.connect(url, function(err:any, db:any) {
                         if (err) throw err;
-                        var dbo = db.db("kino");
-                        var myobj = { 
+                        let dbo = db.db("kino");
+                        let myobj = { 
                             name: data.name,
                             lastName: data.lastName,
                             pw: pw,
@@ -71,7 +71,7 @@ export default {
             if(req.params.id != undefined && req.headers.authcode != undefined) {
                 MongoClient.connect(url, function(err:any, db:any) {
                     if (err) throw err;
-                    var dbo = db.db("kino");
+                    let dbo = db.db("kino");
                     const o_id = new ObjectId(req.params.id);
                     dbo.collection("users").findOne({_id: o_id, authcode: req.headers.authcode}, function(err:any, result:any) {
                         if (err || result === null){
@@ -112,7 +112,7 @@ export default {
 
                 MongoClient.connect(url, function(err:any, db:any) {
                     if (err) throw err;
-                    var dbo = db.db("kino");
+                    let dbo = db.db("kino");
                     dbo.collection("users").findOne({email: data.email, pw: pw}, function(err:any, result:any) {
                         if (err || result === null){
                             res.status(411).send("could not find user");
@@ -277,7 +277,7 @@ export default {
 
                             let addresses = result.addresses;
                             if(addresses != undefined) {
-                                for (var i = addresses.length - 1; i >= 0; --i) {
+                                for (let i = addresses.length - 1; i >= 0; --i) {
                                     if (addresses[i].id == id) {
                                         addresses.splice(i,1);
                                     }

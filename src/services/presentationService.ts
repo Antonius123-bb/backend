@@ -1,6 +1,7 @@
-var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/";
-var ObjectId = require('mongodb').ObjectId;
+let MongoClient = require('mongodb').MongoClient;
+let url = "mongodb://localhost:27017/";
+let ObjectId = require('mongodb').ObjectId;
+let m = require('moment');
 
 export default {    
 
@@ -9,7 +10,7 @@ export default {
         try {
             MongoClient.connect(url, function(err:any, db:any) {
                 if (err) throw err;
-                var dbo = db.db("kino");
+                let dbo = db.db("kino");
                 
                 dbo.collection("presentations").find({}).toArray(function(err:any, result:any) {
                     if (err || result === null) {
@@ -36,7 +37,7 @@ export default {
 
                 MongoClient.connect(url, function(err:any, db:any) {
                     if (err) throw err;
-                    var dbo = db.db("kino");
+                    let dbo = db.db("kino");
           
                     const o_id = new ObjectId(req.params.id);
 
@@ -68,11 +69,9 @@ export default {
 
                 MongoClient.connect(url, function(err:any, db:any) {
                     if (err) throw err;
-                    var dbo = db.db("kino");
-          
-                    const o_id = new ObjectId(req.params.id);
+                    let dbo = db.db("kino");
 
-                    dbo.collection("presentations").findOne({ _id: o_id }, function(err:any, result:any) {
+                    dbo.collection("presentations").find({ movieId: req.params.id }).sort( { presentationStart: 1 } ).toArray(function(err:any, result:any) {
                         if (err){
                             res.status(411).send("presentation could not be requested");
                         } else {
@@ -103,7 +102,7 @@ export default {
 
                 MongoClient.connect(url, function(err:any, db:any) {
                     if (err) throw err;
-                    var dbo = db.db("kino");
+                    let dbo = db.db("kino");
           
                     const o_id = new ObjectId(req.body.presentationId);
 
@@ -179,19 +178,32 @@ export default {
     },
 
     //create presentation
-    createPresentation: (req:any, res:any) => {
-        try {
-            if(req.body.presentationStart != undefined && req.body.presentationEnd != undefined
-                && req.body.movieId != undefined && req.body.room != undefined && req.body.basicPrice != undefined && req.body.roomId != undefined) {
+    createPresentation: async(req:any, res:any) => {
+        const db = await MongoClient.connect(url, { useNewUrlParser: true })
+                        .catch((err:any) => {  });
 
-                MongoClient.connect(url, function(err:any, db:any) {
-                    if (err) throw err;
-                    var dbo = db.db("kino");
+        try {
+            if(req.body.presentationStart != undefined && req.body.movieId != undefined 
+                && req.body.basicPrice != undefined && req.body.roomId != undefined) {
+                    let stop = false;
+                
+                    let dbo = db.db("kino");
+
+                    let o_id = "";
+                    try {
+                        o_id = new ObjectId(req.body.movieId);
+                    } catch(e) {}
+
+                    //get duration to calc endTime
+                    let result = await dbo.collection("movies").findOne({ _id: o_id });
+
+                    const presentationStart = new Date(req.body.presentationStart).getTime();
+                    const presentationEnd = new Date(req.body.presentationStart).getTime() + m.duration(result.duration).asMinutes() * 60000 ;
 
                     //get room id and load array from db to show seats
-                    var myobj = { 
-                        presentationStart: req.body.presentationStart,
-                        presentationEnd: req.body.presentationEnd,
+                    let myobj = { 
+                        presentationStart: presentationStart,
+                        presentationEnd: presentationEnd,
                         movieId: req.body.movieId,
                         basicPrice: req.body.basicPrice,
                         roomId: req.body.roomId,
@@ -204,51 +216,64 @@ export default {
                         } else {
                             res.status(200).send("presentation created");
                         }
-                        db.close();
                     });
-                });
             } else {
                 res.status(406).send("please send all required attributes");
             }
         }catch(e) {
             res.status(500).send("internal server error");
+        }finally{
+            db.close();
         }
     },
 
     //update presentation by id
-    updatePresentationById: (req:any, res:any) => {
+    updatePresentationById: async(req:any, res:any) => {
+        const db = await MongoClient.connect(url, { useNewUrlParser: true })
+                .catch((err:any) => {  });
+
         try {
             if(req.body.id != undefined && req.body.data.presentationStart != undefined && req.body.data.presentationEnd != undefined
                 && req.body.data.movieId != undefined) {
 
-                MongoClient.connect(url, function(err:any, db:any) {
-                    if (err) throw err;
-                    var dbo = db.db("kino");
+                let dbo = db.db("kino");
 
-                    var newVals = { 
-                        presentationStart: req.body.data.presentationStart,
-                        presentationEnd: req.body.data.presentationEnd,
-                        movieId: req.body.data.movieId
-                    };
+                let m_id = "";
+                try {
+                    m_id = new ObjectId(req.body.data.movieId);
+                } catch(e) {}
 
-                    const newValues = { $set: newVals };
+                //get duration to calc endTime
+                let result = await dbo.collection("movies").findOne({ _id: m_id });
 
-                    const o_id = new ObjectId(req.body.id);
+                const presentationStart = new Date(req.body.data.presentationStart).getTime();
+                const presentationEnd = new Date(req.body.data.presentationStart).getTime() + m.duration(result.duration).asMinutes() * 60000 ;
 
-                    dbo.collection("presentations").updateOne({ _id: o_id }, newValues, function(err:any, result:any) {
-                        if (err){
-                            res.status(411).send("presentation could not be updated");
-                        } else {
-                            res.status(200).send("presentation updated");
-                        }
-                        db.close();
-                    });
+                let newVals = { 
+                    presentationStart: presentationStart,
+                    presentationEnd: presentationEnd,
+                    movieId: req.body.data.movieId
+                };
+
+                const newValues = { $set: newVals };
+
+                const o_id = new ObjectId(req.body.id);
+
+                dbo.collection("presentations").updateOne({ _id: o_id }, newValues, function(err:any, result:any) {
+                    if (err){
+                        res.status(411).send("presentation could not be updated");
+                    } else {
+                        res.status(200).send("presentation updated");
+                    }
                 });
             } else {
                 res.status(406).send("please send all required attributes");
             }
         }catch(e) {
+            console.log(e)
             res.status(500).send("internal server error");
+        }finally{
+            db.close();
         }
     },
     
@@ -259,7 +284,7 @@ export default {
 
                 MongoClient.connect(url, function(err:any, db:any) {
                     if (err) throw err;
-                    var dbo = db.db("kino");
+                    let dbo = db.db("kino");
 
                     const o_id = new ObjectId(req.body.id);
 
