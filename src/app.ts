@@ -36,6 +36,7 @@ app.get('/getMovieById/:id', (req, res) => movieService.getMovieById(req, res));
 //presentation routes
 app.get('/getAllPresentations', (req, res) => presentationService.getAllPresentations(req, res));
 app.get('/getPresentationById/:id', (req, res) => presentationService.getPresentationById(req, res));
+app.get('/getPresentationByMovieId/:id', (req, res) => presentationService.getPresentationByMovieId(req, res));
 app.post('/bookSeats', (req, res) => presentationService.bookSeats(req, res));
 app.post('/createPresentation', (req, res) => presentationService.createPresentation(req, res));
 app.post('/updatePresentationById', (req, res) => presentationService.updatePresentationById(req, res));

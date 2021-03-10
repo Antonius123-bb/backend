@@ -60,6 +60,38 @@ export default {
             res.status(500).send("internal server error");
         }
     },
+
+    //get presentation by movie id
+    getPresentationByMovieId: (req:any, res:any) => {
+        try {
+            if(req.params.id != undefined) {
+
+                MongoClient.connect(url, function(err:any, db:any) {
+                    if (err) throw err;
+                    var dbo = db.db("kino");
+          
+                    const o_id = new ObjectId(req.params.id);
+
+                    dbo.collection("presentations").findOne({ _id: o_id }, function(err:any, result:any) {
+                        if (err){
+                            res.status(411).send("presentation could not be requested");
+                        } else {
+                            let r = {
+                                text: "presentation requested",
+                                data: result
+                            }
+                            res.status(200).send(r);
+                        }
+                        db.close();
+                    });
+                });
+            } else {
+                res.status(406).send("please send all required attributes");
+            }
+        }catch(e) {
+            res.status(500).send("internal server error");
+        }
+    },
     
     //book seats
     bookSeats: (req:any, res:any) => {
@@ -150,7 +182,7 @@ export default {
     createPresentation: (req:any, res:any) => {
         try {
             if(req.body.presentationStart != undefined && req.body.presentationEnd != undefined
-                && req.body.movieId != undefined && req.body.room != undefined) {
+                && req.body.movieId != undefined && req.body.room != undefined && req.body.basicPrice != undefined) {
 
                 MongoClient.connect(url, function(err:any, db:any) {
                     if (err) throw err;
@@ -162,6 +194,7 @@ export default {
                         presentationStart: req.body.presentationStart,
                         presentationEnd: req.body.presentationEnd,
                         movieId: req.body.movieId,
+                        basicPrice: req.body.basicPrice,
                         seats: [{id: 1, booked: false, price: 12.50, x: 0, y: 0}, {id: 2, booked: false, price: 12.50, x: 10, y: 0}]
                     };
 
@@ -186,7 +219,7 @@ export default {
     updatePresentationById: (req:any, res:any) => {
         try {
             if(req.body.id != undefined && req.body.data.presentationStart != undefined && req.body.data.presentationEnd != undefined
-                && req.body.data.movieId != undefined) {
+                && req.body.data.movieId != undefined && req.body.basicPrice != undefined) {
 
                 MongoClient.connect(url, function(err:any, db:any) {
                     if (err) throw err;
@@ -195,7 +228,8 @@ export default {
                     var newVals = { 
                         presentationStart: req.body.data.presentationStart,
                         presentationEnd: req.body.data.presentationEnd,
-                        movieId: req.body.data.movieId
+                        movieId: req.body.data.movieId,
+                        basicPrice: req.body.basicPrice
                     };
 
                     const newValues = { $set: newVals };
