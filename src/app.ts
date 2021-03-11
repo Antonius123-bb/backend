@@ -25,7 +25,7 @@ app.post('/registerUser', (req, res) => userService.registerUser(req, res));
 app.get('/getUserById/:id', (req, res) => userService.getUserById(req, res));
 app.post('/validateUser', (req, res) => userService.validateUser(req, res));
 app.post('/updateUserById', (req, res) => userService.updateUserById(req, res));
-app.post('/addAdressByUserId', (req, res) => userService.addAdressByUserId(req, res));
+app.post('/addAddressByUserId', (req, res) => userService.addAddressByUserId(req, res));
 app.post('/deleteAddressById', (req, res) => userService.deleteAddressById(req, res));
 app.post('/changePassword', (req, res) => userService.changePassword(req, res));
 

@@ -196,7 +196,7 @@ export default {
     },
 
     //add address by user id
-    addAdressByUserId: (req:any, res:any) => {
+    addAddressByUserId: (req:any, res:any) => {
         try {
             if(req.body.data != undefined && req.headers.authcode != undefined && req.body.id != undefined) {
                 MongoClient.connect(url, function(err:any, db:any) {
