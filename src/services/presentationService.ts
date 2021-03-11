@@ -16,9 +16,19 @@ export default {
                     if (err || result === null) {
                         res.status(411).send("could not find presentations");
                     } else {
+                        let resultArr: any[] = []
+
+                        if(result.length > 0) {
+                            result.map((m:any) => {
+                                if(m.presentationStart > new Date().getTime()) {
+                                    resultArr.push(m);
+                                }
+                            })
+                        }
+
                         let r = {
-                            text: "all presentations successfully requested",
-                            data: result
+                            text: "presentation requested",
+                            data: resultArr
                         }
                         res.status(200).send(r);
                     }
@@ -75,9 +85,20 @@ export default {
                         if (err){
                             res.status(411).send("presentation could not be requested");
                         } else {
+
+                            let resultArr: any[] = []
+
+                            if(result.length > 0) {
+                                result.map((m:any) => {
+                                    if(m.presentationStart > new Date().getTime()) {
+                                        resultArr.push(m);
+                                    }
+                                })
+                            }
+
                             let r = {
                                 text: "presentation requested",
-                                data: result
+                                data: resultArr
                             }
                             res.status(200).send(r);
                         }
@@ -233,7 +254,7 @@ export default {
                 .catch((err:any) => {  });
 
         try {
-            if(req.body.id != undefined && req.body.data.presentationStart != undefined 
+            if(req.body.id != undefined && req.body.data.presentationStart != undefined && req.body.data.presentationEnd != undefined
                 && req.body.data.movieId != undefined) {
 
                 let dbo = db.db("kino");
