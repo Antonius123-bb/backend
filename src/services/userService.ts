@@ -215,6 +215,7 @@ export default {
                                 street: data.street,
                                 number: data.number,
                                 plz: data.plz,
+                                city: data.city,
                                 id: uuidv4()
                             }
                             let addresses = result.addresses;
