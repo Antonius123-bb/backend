@@ -233,7 +233,7 @@ export default {
                 .catch((err:any) => {  });
 
         try {
-            if(req.body.id != undefined && req.body.data.presentationStart != undefined && req.body.data.presentationEnd != undefined
+            if(req.body.id != undefined && req.body.data.presentationStart != undefined 
                 && req.body.data.movieId != undefined) {
 
                 let dbo = db.db("kino");
