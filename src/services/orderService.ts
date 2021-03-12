@@ -19,7 +19,7 @@ export default {
           
                     const o_id = new ObjectId(req.body.id);
 
-                    dbo.collection("order").findOne({ _id: o_id }, function(err:any, result:any) {
+                    dbo.collection("orders").findOne({ _id: o_id }, function(err:any, result:any) {
                         if (err){
                             stop = true;
                             res.status(411).send("order does not exist");
