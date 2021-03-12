@@ -179,9 +179,9 @@ export default {
                             if(!stop) {
                                 dbo.collection("orders").insertOne(myObj, function(err3:any, result3:any) {
                                     if (err3){
-                                        res.status(200).send("order placed");
-                                    } else {
                                         res.status(400).send("order could not be placed");
+                                    } else {
+                                        res.status(200).send("order placed");
                                     }
                                 });                                
                             }
