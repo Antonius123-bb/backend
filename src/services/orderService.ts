@@ -75,7 +75,7 @@ export default {
                                 }
     
                                 if(!stop) {
-                                    dbo.collection("order").deleteOne({ _id: o_id }, function(err:any, result:any) {
+                                    dbo.collection("orders").deleteOne({ _id: o_id }, function(err:any, result:any) {
                                         if (err){
                                             res.status(411).send("order could not be deleted");
                                         } else {
