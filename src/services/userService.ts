@@ -27,7 +27,8 @@ export default {
                             name: data.name,
                             lastName: data.lastName,
                             pw: pw,
-                            email: data.email
+                            email: data.email,
+                            admin: false
                         };
 
                         dbo.collection("users").findOne({email: data.email}, function(err:any, result:any) {
@@ -43,7 +44,8 @@ export default {
                                                 lastName: result2.ops[0].lastName,
                                                 id: result2.ops[0]._id,
                                                 email: result2.ops[0].email,
-                                                addresses: result2.ops[0].addresses
+                                                addresses: result2.ops[0].addresses,
+                                                admin: result2.ops[0].admin
                                             }
                                         }
                                         res.status(200).send(r);
@@ -84,7 +86,8 @@ export default {
                                     lastName: result.lastName,
                                     id: result._id,
                                     email: result.email,
-                                    addresses: result.addresses
+                                    addresses: result.addresses,
+                                    admin: result.admin
                                 }
                             }
                             res.status(200).send(r);
@@ -134,7 +137,8 @@ export default {
                                     id: result._id,
                                     email: result.email,
                                     authcode: authcode,
-                                    addresses: result.addresses
+                                    addresses: result.addresses,
+                                    admin: result.admin
                                 }
                             }
                             res.status(200).send(r);
@@ -177,7 +181,8 @@ export default {
                                             lastName: result2.lastName,
                                             id: result2._id,
                                             email: result2.email,
-                                            addresses: result2.addresses
+                                            addresses: result2.addresses,
+                                            admin: result2.admin
                                         }
                                     }
                                     res.status(200).send(r);
@@ -241,7 +246,8 @@ export default {
                                                     lastName: result3.lastName,
                                                     id: result3._id,
                                                     email: result3.email,
-                                                    addresses: result3.addresses
+                                                    addresses: result3.addresses,
+                                                    admin: result3.admin
                                                 }
                                             }
                                             res.status(200).send(r);
@@ -301,7 +307,8 @@ export default {
                                                         lastName: result3.lastName,
                                                         id: result3._id,
                                                         email: result3.email,
-                                                        addresses: result3.addresses
+                                                        addresses: result3.addresses,
+                                                        admin: result3.admin
                                                     }
                                                 }
                                                 res.status(200).send(r);
