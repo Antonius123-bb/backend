@@ -3,6 +3,9 @@ let url = "mongodb://localhost:27017/";
 let ObjectId = require('mongodb').ObjectId;
 let m = require('moment');
 
+import { room2 } from "../constants";
+
+
 export default {    
 
     //get all presentations
@@ -205,7 +208,7 @@ export default {
 
         try {
             if(req.body.presentationStart != undefined && req.body.movieId != undefined 
-                && req.body.basicPrice != undefined && req.body.roomId != undefined) {
+                && req.body.basicPrice != undefined && req.body.roomId != undefined && req.body.threeD != undefined) {
                     let stop = false;
                 
                     let dbo = db.db("kino");
@@ -228,6 +231,7 @@ export default {
                         movieId: req.body.movieId,
                         basicPrice: req.body.basicPrice,
                         roomId: req.body.roomId,
+                        threeD: req.body.threeD,
                         seats: [{id: 1, booked: false, price: 12.50, x: 0, y: 0}, {id: 2, booked: false, price: 12.50, x: 10, y: 0}]
                     };
 
@@ -264,6 +268,37 @@ export default {
                     m_id = new ObjectId(req.body.data.movieId);
                 } catch(e) {}
 
+                const seats = {
+                    "seats": room2,
+                    "basicprice": 10,
+                    "categories": [
+                        {
+                            "name": "Parkett",
+                            "upsell": 0
+                        },
+                        {
+                            "name": "Loge",
+                            "upsell": 3
+                        },
+                        {
+                            "name": "Premium",
+                            "upsell": 1.5
+                        },
+                        {
+                            "name": "Loveseat",
+                            "upsell": 8
+                        },
+                        {
+                            "name": "Barrierefrei",
+                            "upsell": -2
+                        }
+                    ],
+                    "height": 500,
+                    "width": 500
+                };
+
+                console.log("S", seats)
+
                 //get duration to calc endTime
                 let result = await dbo.collection("movies").findOne({ _id: m_id });
 
@@ -273,7 +308,8 @@ export default {
                 let newVals = { 
                     presentationStart: presentationStart,
                     presentationEnd: presentationEnd,
-                    movieId: req.body.data.movieId
+                    movieId: req.body.data.movieId,
+                    seats: seats
                 };
 
                 const newValues = { $set: newVals };
