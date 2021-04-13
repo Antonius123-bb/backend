@@ -15,7 +15,7 @@ export default {
                 if (err) throw err;
                 let dbo = db.db("kino");
                 
-                dbo.collection("presentations").find({}).toArray(function(err:any, result:any) {
+                dbo.collection("presentations").find({}).sort( { presentationStart: 1 } ).toArray(function(err:any, result:any) {
                     if (err || result === null) {
                         res.status(411).send("could not find presentations");
                     } else {
