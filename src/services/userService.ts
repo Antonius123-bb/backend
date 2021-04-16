@@ -69,7 +69,6 @@ export default {
     //get existing user by id
     getUserById: (req:any, res:any) => {
         try {
-            console.log(req.params.id)
             if(req.params.id != undefined && req.headers.authcode != undefined) {
                 MongoClient.connect(url, function(err:any, db:any) {
                     if (err) throw err;

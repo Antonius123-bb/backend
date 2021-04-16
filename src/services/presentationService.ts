@@ -137,18 +137,15 @@ export default {
                             res.status(411).send("presentation could not be requested");
                         } else {
                             let seats = result.seats;
-                            
-                            console.log("S", seats);
 
                             for(let a = 0; a < req.body.seats.length; a++) {
-                                for (let i = 0; i < seats.length; i++) {
-                                    if (seats[i].id == req.body.seats[a]) {
-                                        if(seats[i].booked != true) {
-                                            seats[i].booked = true;
-                                            console.log("book")
+                                for (let i = 0; i < seats.seats.length; i++) {
+                                    if (seats.seats[i].id == req.body.seats[a]) {
+                                        if(seats.seats[i].booked != true) {
+                                            seats.seats[i].booked = true;
                                         } else {
                                             stop = true;
-                                            //res.status(400).send("at least one seat was already booked");
+                                            res.status(400).send("at least one seat was already booked");
                                         }
                                     }
                                 }
@@ -303,8 +300,6 @@ export default {
                     "width": 500
                 };
 
-                console.log("S", seats)
-
                 //get duration to calc endTime
                 let result = await dbo.collection("movies").findOne({ _id: m_id });
 
@@ -333,7 +328,6 @@ export default {
                 res.status(406).send("please send all required attributes");
             }
         }catch(e) {
-            console.log(e)
             res.status(500).send("internal server error");
         }finally{
             db.close();

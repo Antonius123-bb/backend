@@ -42,7 +42,6 @@ export default {
                     } catch(e) {}
                     
                     dbo.collection("movies").findOne({ _id: o_id }, function(err:any, result:any) {
-                        console.log(result)
                         if (err || result === null) {
                             res.status(411).send("could not find movies");
                         } else {

@@ -19,7 +19,7 @@ export default {
           
                     const o_id = new ObjectId(req.body.id);
 
-                    dbo.collection("orders").findOne({ _id: o_id }, function(err:any, result:any) {
+                    dbo.collection("orders").findOne({ _id: o_id }, async function(err:any, result:any) {
                         if (err){
                             stop = true;
                             res.status(411).send("order does not exist");
@@ -41,32 +41,26 @@ export default {
                             if(!stop) {
                                 let presentationId = result.presentationId;
                                 const o_presentationId = new ObjectId(presentationId);
-                                let allSeats = [{id: 0, booked: false}];
+                                let allSeats = {id: 0, booked: false, seats: [{"id": 0, "booked": false}]};
                                 let bookedSeats = result.seats;
     
-                                if(!stop) {
-                                    dbo.collection("presentations").findOne({ _id: o_presentationId }, function(err2:any, result2:any) {
-                                        if (err){
-                                            stop = true;
-                                            res.status(500).send("internal server error");
-                                        } else {
-                                            allSeats = result2.seats;
-                                        }
-                                    });
-                                }
+
+                                let result2 = await dbo.collection("presentations").findOne({ _id: o_presentationId });
+
+                                allSeats = result2.seats;
     
                                 for(let a = 0; a < bookedSeats.length; a++) {
-                                    for (let i = 0; i < allSeats.length; i++) {
-                                        if (allSeats[i].id == bookedSeats[a]) {
-                                            allSeats[i].booked = false;
+                                    for (let i = 0; i < allSeats.seats.length; i++) {
+                                        if (allSeats.seats[i].id == bookedSeats[a]) {
+                                            allSeats.seats[i].booked = false;
                                         }
                                     }
                                 }
     
-                                const newSeats = { $set: { allSeats } };
+                                const newSeats = { $set: { seats: allSeats } };
                                 
                                 if(!stop) {
-                                    dbo.collection("presentations").updateOne({ _id: o_id }, newSeats, function(err2:any, result2:any) {
+                                    dbo.collection("presentations").updateOne({ _id: o_presentationId }, newSeats, function(err2:any, result2:any) {
                                         if (err2){
                                             stop = true;
                                             res.status(411).send("seats could not be released");

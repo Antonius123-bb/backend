@@ -23,8 +23,6 @@ const fs = require('fs');
 //     }
 // }
 
-// console.log(arr);
-
 // let data = JSON.stringify(arr);
 // fs.writeFileSync('room.json', data);
 
