@@ -3,7 +3,7 @@ let url = "mongodb://localhost:27017/";
 let ObjectId = require('mongodb').ObjectId;
 let m = require('moment');
 
-import { room2 } from "../constants";
+import { room1, room2 } from "../constants";
 
 
 export default {    
@@ -132,22 +132,28 @@ export default {
 
                     dbo.collection("presentations").findOne({ _id: o_id }, function(err:any, result:any) {
                         if (err){
+        
                             stop = true;
                             res.status(411).send("presentation could not be requested");
                         } else {
                             let seats = result.seats;
+                            
+                            console.log("S", seats);
+
                             for(let a = 0; a < req.body.seats.length; a++) {
                                 for (let i = 0; i < seats.length; i++) {
                                     if (seats[i].id == req.body.seats[a]) {
                                         if(seats[i].booked != true) {
                                             seats[i].booked = true;
+                                            console.log("book")
                                         } else {
                                             stop = true;
-                                            res.status(400).send("at least one seat was already booked");
+                                            //res.status(400).send("at least one seat was already booked");
                                         }
                                     }
                                 }
                             }
+
 
                             const newSeats = { $set: { seats } };
                             
