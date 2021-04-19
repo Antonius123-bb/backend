@@ -120,7 +120,7 @@ export default {
     bookSeats: (req:any, res:any) => {
         try {
             if(req.body.seats != undefined && req.body.presentationId != undefined &&
-                (req.body.userId || req.body.userData) != undefined && req.body.payment != undefined) {
+                (req.body.userId || req.body.userData) != undefined && req.body.payment != undefined && req.body.selectedAdress != undefined) {
 
                 let stop = false;
 
@@ -179,6 +179,7 @@ export default {
                                 userSts: userSts,
                                 user: user,
                                 payment: req.body.payment,
+                                selectedAdress: req.body.selectedAdress,
                                 time: Date.now()
                             }
                             
