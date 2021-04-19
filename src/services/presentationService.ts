@@ -228,6 +228,45 @@ export default {
                     const presentationEnd = new Date(req.body.presentationStart).getTime() + m.duration(result.duration).asMinutes() * 60000 ;
 
                     //get room id and load array from db to show seats
+                    let room:any = [];
+
+                    if(req.body.roomId === "room1") {
+                        room = room1;
+                        console.log("1")
+                    } else if(req.body.roomId === "room2") {
+                        room = room2;
+                        console.log("2")
+                    }
+
+                    const seats = {
+                        "seats": room,
+                        "basicprice": 10,
+                        "categories": [
+                            {
+                                "name": "Parkett",
+                                "upsell": 0
+                            },
+                            {
+                                "name": "Loge",
+                                "upsell": 3
+                            },
+                            {
+                                "name": "Premium",
+                                "upsell": 1.5
+                            },
+                            {
+                                "name": "Loveseat",
+                                "upsell": 8
+                            },
+                            {
+                                "name": "Barrierefrei",
+                                "upsell": -2
+                            }
+                        ],
+                        "height": 500,
+                        "width": 500
+                    };
+
                     let myobj = { 
                         presentationStart: presentationStart,
                         presentationEnd: presentationEnd,
@@ -235,7 +274,7 @@ export default {
                         basicPrice: req.body.basicPrice,
                         roomId: req.body.roomId,
                         threeD: req.body.threeD,
-                        seats: [{id: 1, booked: false, price: 12.50, x: 0, y: 0}, {id: 2, booked: false, price: 12.50, x: 10, y: 0}]
+                        seats: seats
                     };
 
                     dbo.collection("presentations").insertOne(myobj, function(err:any, result:any) {
