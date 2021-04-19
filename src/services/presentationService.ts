@@ -232,10 +232,8 @@ export default {
 
                     if(req.body.roomId === "room1") {
                         room = room1;
-                        console.log("1")
                     } else if(req.body.roomId === "room2") {
                         room = room2;
-                        console.log("2")
                     }
 
                     const seats = {
